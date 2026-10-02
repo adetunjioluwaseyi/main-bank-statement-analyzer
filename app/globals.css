@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #f4f7f5;
+  --foreground: #183238;
+  --card: #ffffff;
+  --card-foreground: #183238;
+  --popover: #ffffff;
+  --popover-foreground: #183238;
+  --primary: #183238;
+  --primary-foreground: #ffffff;
+  --secondary: #e5f3d4;
+  --secondary-foreground: #183238;
+  --muted: #eef3f0;
+  --muted-foreground: #607277;
+  --accent: #d9f36b;
+  --accent-foreground: #183238;
+  --destructive: #c85b4c;
+  --destructive-foreground: #ffffff;
+  --border: #dbe6e1;
+  --input: #f7faf8;
+  --ring: rgba(24, 50, 56, 0.24);
+  --chart-1: #2e8b80;
+  --chart-2: #d68b46;
+  --chart-3: #d9f36b;
+  --chart-4: #6c8fa3;
+  --chart-5: #c85b4c;
+  --radius: 0.75rem;
+  --sidebar: #eaf1ee;
+  --sidebar-foreground: #183238;
+  --sidebar-primary: #dbe6e1;
+  --sidebar-primary-foreground: #183238;
+  --sidebar-accent: #d9f36b;
+  --sidebar-accent-foreground: #183238;
+  --sidebar-border: #dbe6e1;
+  --sidebar-ring: rgba(24, 50, 56, 0.24);
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #f8fafc;
+  --primary-foreground: #0f172a;
+  --secondary: #8b5cf6;
+  --secondary-foreground: #ffffff;
+  --muted: #64748b;
+  --muted-foreground: #f8fafc;
+  --accent: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #334155;
+  --input: #1e293b;
+  --ring: rgba(139, 92, 246, 0.5);
+  --chart-1: #6366f1;
+  --chart-2: #ec4899;
+  --chart-3: #fbbf24;
+  --chart-4: #3b82f6;
+  --chart-5: #34d399;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #334155;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #8b5cf6;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #334155;
+  --sidebar-ring: rgba(139, 92, 246, 0.5);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image: radial-gradient(circle at 84% 0%, rgba(217, 243, 107, 0.15), transparent 26rem), linear-gradient(135deg, rgba(255, 255, 255, 0.5), transparent 55%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .workspace-grid {
+    background-image: linear-gradient(rgba(24, 50, 56, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(24, 50, 56, 0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .animate-rise {
+    animation: rise-in 500ms ease-out both;
+  }
+
+  .animate-rise-delay {
+    animation: rise-in 500ms 100ms ease-out both;
+  }
+
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

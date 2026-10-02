@@ -1,0 +1,6 @@
+{
+  "name": "Statement Analyzer",
+  "description": "Professional lender underwriting dashboard with 100% transaction reconciliation, genuine-income detection, circular-transfer fraud monitoring, and financial health credit risk scoring.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

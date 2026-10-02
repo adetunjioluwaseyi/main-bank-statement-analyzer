@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with authentication and access status details",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID of the user" },
+        "email": { "type": "string", "description": "Google email address of the user" },
+        "displayName": { "type": "string", "description": "Display name of the user" },
+        "photoURL": { "type": "string", "description": "Avatar URL of the user" },
+        "role": { "type": "string", "enum": ["user", "admin"], "description": "Role permission level" },
+        "status": { "type": "string", "enum": ["active", "suspended"], "description": "Account active or suspended status" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of account creation" },
+        "lastActiveAt": { "type": "string", "description": "ISO timestamp of last activity" },
+        "uploadedFilesCount": { "type": "number", "description": "Count of bank statement files uploaded" }
+      },
+      "required": ["uid", "email", "role", "status"]
+    },
+    "UploadRecord": {
+      "title": "UploadRecord",
+      "description": "Bank statement upload and analytical summary record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of user who uploaded" },
+        "userEmail": { "type": "string", "description": "Email of user who uploaded" },
+        "fileName": { "type": "string", "description": "Original file name" },
+        "fileSize": { "type": "number", "description": "File size in bytes" },
+        "rowCount": { "type": "number", "description": "Number of transactions parsed" },
+        "openingBalance": { "type": "number", "description": "Opening statement balance" },
+        "closingBalance": { "type": "number", "description": "Closing statement balance" },
+        "netCashFlow": { "type": "number", "description": "Net cash flow amount" },
+        "totalInflow": { "type": "number", "description": "Total credits inflow" },
+        "totalOutflow": { "type": "number", "description": "Total debits outflow" },
+        "healthScore": { "type": "number", "description": "Calculated underwriting financial health score" },
+        "uploadedAt": { "type": "string", "description": "ISO timestamp of upload" }
+      },
+      "required": ["userId", "fileName", "uploadedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Designated administrator identity",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Administrator Auth UID" },
+        "email": { "type": "string", "description": "Administrator email address" },
+        "assignedAt": { "type": "string", "description": "ISO timestamp when admin role was granted" }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of all registered users and their account statuses"
+    },
+    "/uploads/{uploadId}": {
+      "schema": "UploadRecord",
+      "description": "Collection of all bank statements and summaries uploaded across the platform"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminRecord",
+      "description": "Collection of authorized administrators"
+    }
+  }
+}
