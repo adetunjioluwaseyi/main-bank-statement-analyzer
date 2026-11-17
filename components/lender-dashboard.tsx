@@ -33,7 +33,7 @@ import { Slider } from "@/components/ui/slider";
 import { formatMoney, SupportedCurrency } from "@/lib/currencies";
 import type { UnderwritingMetrics } from "@/lib/underwriting";
 import type { StatementForensicsResult } from "@/lib/statement-forensics";
-import type { CSVData } from "@/app/page";
+import type { CSVData } from "@/app/page2";
 
 interface LenderDashboardProps {
   statement: CSVData | null;

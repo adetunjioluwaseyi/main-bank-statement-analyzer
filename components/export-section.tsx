@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import type { ComparisonResult } from "@/app/page"
+import type { ComparisonResult } from "@/app/page2"
 import { Download, FileSpreadsheet, FileText } from "lucide-react"
 
 interface ExportSectionProps {

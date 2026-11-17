@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import type { CSVData, ComparisonResult } from "@/app/page"
+import type { CSVData, ComparisonResult } from "@/app/page2"
 import { Play, TrendingUp, AlertTriangle, SlidersHorizontal } from "lucide-react"
 
 interface ComparisonResultsProps {

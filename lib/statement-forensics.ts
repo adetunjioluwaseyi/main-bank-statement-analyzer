@@ -101,6 +101,101 @@ export interface ForensicTransactionItem {
   balance: number;
 }
 
+// Added: multi-statement bundle support to analyze several bank statements belonging to the same client.
+export interface StatementBundleEntry {
+  statementId: string;
+  bankName?: string;
+  accountNumber?: string;
+  accountHolder?: string;
+  openingBalance?: number;
+  closingBalance?: number;
+  transactions: ForensicTransactionItem[];
+}
+
+export interface ClientStatementBundle {
+  clientId: string;
+  statements: StatementBundleEntry[];
+}
+
+export interface ClientAccountFlowSummary {
+  bankName: string;
+  accountNumber?: string;
+  openingBalance: number;
+  closingBalance: number;
+  totalCredits: number;
+  totalDebits: number;
+  netCashFlow: number;
+  recurringExpenseCount: number;
+}
+
+export interface ClientBundleSummaryResult {
+  totalCredits: number;
+  totalDebits: number;
+  netCashFlow: number;
+  statementCount: number;
+  startDate?: string;
+  endDate?: string;
+  accountFlows: ClientAccountFlowSummary[];
+  recurringExpenseSignals: string[];
+}
+
+// Removed: the earlier implementation only supported a single isolated statement and did not track client-level cash flow.
+export function buildClientStatementBundleSummary(
+  bundle: ClientStatementBundle
+): ClientBundleSummaryResult {
+  const accountFlows = bundle.statements.map((statement) => {
+    const totalCredits = statement.transactions.reduce((sum, tx) => sum + tx.credit, 0);
+    const totalDebits = statement.transactions.reduce((sum, tx) => sum + tx.debit, 0);
+    const recurrenceSignals = statement.transactions.filter(
+      (tx) => tx.description.toLowerCase().includes("transfer") || tx.description.toLowerCase().includes("salary")
+    ).length;
+
+    return {
+      bankName: statement.bankName || "Unknown Bank",
+      accountNumber: statement.accountNumber,
+      openingBalance: statement.openingBalance ?? 0,
+      closingBalance: statement.closingBalance ?? 0,
+      totalCredits,
+      totalDebits,
+      netCashFlow: totalCredits - totalDebits,
+      recurringExpenseCount: recurrenceSignals,
+    };
+  });
+
+  const allTransactions = bundle.statements.flatMap((statement) =>
+    statement.transactions.map((tx) => ({
+      ...tx,
+      statementId: statement.statementId,
+      accountNumber: statement.accountNumber,
+      bankName: statement.bankName || "Unknown Bank",
+    }))
+  );
+
+  const sorted = [...allTransactions].sort((a, b) => a.date.localeCompare(b.date));
+  const recurringExpenseSignals = Array.from(
+    new Set(
+      sorted
+        .filter((tx) => tx.debit > 0 && tx.description.length > 0)
+        .map((tx) => `${tx.date} :: ${tx.description} :: ${tx.debit}`)
+        .slice(0, 10)
+    )
+  );
+
+  const totalCredits = sorted.reduce((sum, tx) => sum + tx.credit, 0);
+  const totalDebits = sorted.reduce((sum, tx) => sum + tx.debit, 0);
+
+  return {
+    totalCredits,
+    totalDebits,
+    netCashFlow: totalCredits - totalDebits,
+    statementCount: bundle.statements.length,
+    startDate: sorted[0]?.date,
+    endDate: sorted[sorted.length - 1]?.date,
+    accountFlows,
+    recurringExpenseSignals,
+  };
+}
+
 export function runStatementForensics(
   transactions: ForensicTransactionItem[],
   openingBalance: number

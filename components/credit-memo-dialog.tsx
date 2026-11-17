@@ -28,7 +28,7 @@ import type { UnderwritingMetrics } from "@/lib/underwriting";
 import type { StatementForensicsResult } from "@/lib/statement-forensics";
 import type { MonthlyBreakdownItem, WeeklyBreakdownItem } from "@/lib/time-breakdown";
 import { openPrintableReport, downloadOfflineReport } from "@/lib/report-export";
-import type { CSVData } from "@/app/page";
+import type { CSVData } from "@/app/page2";
 
 interface CreditMemoDialogProps {
   isOpen: boolean;

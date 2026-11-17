@@ -89,4 +89,4 @@ if __name__ == "__main__":
     models_dir = Path("models")
     models_dir.mkdir(exist_ok=True)
     clf.save_model("models/tamper_xgb.json")
-    print("\n✅ Successfully trained and saved model to: models/tamper_xgb.json")
+    print("\nSuccessfully trained and saved model to: models/tamper_xgb.json")

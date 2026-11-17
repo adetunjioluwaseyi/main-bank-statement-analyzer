@@ -21,14 +21,16 @@ interface UserNavProps {
   onOpenAdmin?: () => void;
   onOpenHistory?: () => void;
   onOpenAuth?: () => void;
+  onSignedOut?: () => void;
 }
 
-export function UserNav({ onOpenAdmin, onOpenHistory, onOpenAuth }: UserNavProps) {
+export function UserNav({ onOpenAdmin, onOpenHistory, onOpenAuth, onSignedOut }: UserNavProps) {
   const { user, profile, loading, isAdmin, isSuspended, logoutUser } = useAuth();
 
   const handleSignOut = async () => {
     try {
       await logoutUser();
+      onSignedOut?.();
       toast.info('Signed out of your account');
     } catch {
       toast.error('Failed to sign out');

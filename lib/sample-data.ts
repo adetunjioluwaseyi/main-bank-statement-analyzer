@@ -1,4 +1,4 @@
-import type { CSVData } from "@/app/page";
+import type { CSVData } from "@/app/page2";
 
 export const SAMPLE_STATEMENTS: Record<string, CSVData> = {
   prime: {

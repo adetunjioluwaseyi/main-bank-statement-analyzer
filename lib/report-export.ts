@@ -32,6 +32,16 @@ export interface ReportExportData {
   income: number;
   outflow: number;
   net: number;
+  openingBalanceSource?: string;
+  closingBalanceSource?: string;
+  incomeSource?: string;
+  outflowSource?: string;
+  reconciliationWarnings?: Array<{
+    label: string;
+    statementValue: number;
+    rowValue: number;
+  }>;
+  coverageWarnings?: string[];
   underwriting: UnderwritingMetrics;
   forensics: StatementForensicsResult;
   monthlyBreakdown: MonthlyBreakdownItem[];
@@ -136,7 +146,7 @@ export function buildReportHtml(data: ReportExportData): string {
     const key = cleanDesc.slice(0, 45).toLowerCase();
     const ex = debitFreqMap.get(key) || { count: 0, total: 0, desc: cleanDesc };
     ex.count++;
-    ex.total += t.debit;customer
+    ex.total += t.debit;
     debitFreqMap.set(key, ex);
   });
 
@@ -436,7 +446,7 @@ export function buildReportHtml(data: ReportExportData): string {
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Insights Analytics Report - ${applicantName}</title>
+  <title>Statement Analyzer Report - ${applicantName}</title>
   <style>
     * {
       box-sizing: border-box;
@@ -752,7 +762,7 @@ export function buildReportHtml(data: ReportExportData): string {
 
     <!-- ================= PAGE 1 ================= -->
     <div class="page-sheet">
-      <div class="report-title">Insights Analytics Report</div>
+      <div class="report-title">Statement Analyzer Report</div>
       <div class="report-subtitle">
         Measure what matters; track income, spend, transaction pattern, financial behavioral and cash flow
       </div>
@@ -900,7 +910,7 @@ export function buildReportHtml(data: ReportExportData): string {
       </div>
 
       <div class="page-footer">
-        <span>Insights Analytics Report · ${accountNumber}</span>
+        <span>Statement Analyzer Report · ${accountNumber}</span>
         <span>Page 1 of 5</span>
       </div>
     </div>
@@ -1032,7 +1042,7 @@ export function buildReportHtml(data: ReportExportData): string {
       </div>
 
       <div class="page-footer">
-        <span>Insights Analytics Report · ${accountNumber}</span>
+        <span>Statement Analyzer Report · ${accountNumber}</span>
         <span>Page 2 of 5</span>
       </div>
     </div>
@@ -1163,7 +1173,7 @@ export function buildReportHtml(data: ReportExportData): string {
       </div>
 
       <div class="page-footer">
-        <span>Insights Analytics Report · ${accountNumber}</span>
+        <span>Statement Analyzer Report · ${accountNumber}</span>
         <span>Page 3 of 5</span>
       </div>
     </div>
@@ -1222,18 +1232,33 @@ export function buildReportHtml(data: ReportExportData): string {
 
       <!-- Cash Flow Section -->
       <div class="section-title">Cash Flow</div>
+      ${
+        data.reconciliationWarnings?.length || data.coverageWarnings?.length
+          ? `<div class="card" style="margin-bottom: 12px; border-color: #f59e0b; background: #fffbeb;">
+              <div class="card-title" style="color: #92400e;">Statement reconciliation needs review</div>
+              <ul style="margin: 6px 0 0; padding-left: 18px; color: #78350f;">
+                ${(data.coverageWarnings || []).map((warning) => `<li>${warning}</li>`).join("")}
+                ${(data.reconciliationWarnings || [])
+                  .map((warning) => `<li>${warning.label}: statement ${fmt(warning.statementValue)}; rows ${fmt(warning.rowValue)}</li>`)
+                  .join("")}
+              </ul>
+            </div>`
+          : ""
+      }
       <div class="card-grid-4" style="margin-bottom: 12px;">
         <div class="card" style="padding: 10px;">
-          <div style="font-size: 10.5px; color: #64748b;">Valid Credit</div>
+          <div style="font-size: 10.5px; color: #64748b;">Total Inflow</div>
           <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 3px;">
             ${fmt(validCredit)}
           </div>
+          <div style="font-size: 9px; color: #64748b; margin-top: 3px;">${data.incomeSource || "Calculated from transaction rows"}</div>
         </div>
         <div class="card" style="padding: 10px;">
           <div style="font-size: 10.5px; color: #64748b;">Closing Balance</div>
           <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 3px;">
             ${fmt(closingBalance)}
           </div>
+          <div style="font-size: 9px; color: #64748b; margin-top: 3px;">${data.closingBalanceSource || "Last transaction balance"}</div>
         </div>
 
         <div class="card" style="padding: 10px;">
@@ -1241,6 +1266,7 @@ export function buildReportHtml(data: ReportExportData): string {
           <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 3px;">
             ${fmt( openingBalance)}
           </div>
+          <div style="font-size: 9px; color: #64748b; margin-top: 3px;">${data.openingBalanceSource || "Estimated from first transaction balance"}</div>
         </div>
         <div class="card" style="padding: 10px;">
           <div style="font-size: 10.5px; color: #64748b;">Average Monthly Balance</div>
@@ -1260,6 +1286,7 @@ export function buildReportHtml(data: ReportExportData): string {
       <div class="card-grid-2" style="margin-bottom: 16px;">
         <div class="card">
           <div class="card-title">Debits</div>
+          <div style="font-size: 9px; color: #64748b; margin-bottom: 6px;">${data.outflowSource || "Calculated from transaction rows"}</div>
           <div class="data-row">
             <span class="data-label">Total Turnover:</span>
             <span class="data-val">${fmt(totalDebitsTurnover)}</span>
@@ -1416,7 +1443,7 @@ export function buildReportHtml(data: ReportExportData): string {
       </div>
 
       <div class="page-footer">
-        <span>Insights Analytics Report · ${accountNumber}</span>
+        <span>Statement Analyzer Report · ${accountNumber}</span>
         <span>Page 4 of 5</span>
       </div>
     </div>
@@ -1529,7 +1556,7 @@ export function buildReportHtml(data: ReportExportData): string {
       </div>
 
       <div class="page-footer">
-        <span>Insights Analytics Report · ${accountNumber}</span>
+        <span>Statement Analyzer Report · ${accountNumber}</span>
         <span>Page 5 of 5</span>
       </div>
     </div>

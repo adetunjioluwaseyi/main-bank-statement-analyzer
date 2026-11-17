@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileUpload } from "@/components/file-upload";
+import { FileUpload } from "@/components/file-upload2";
 import { DataPreview } from "@/components/data-preview";
 import { Button } from "@/components/ui/button";
 
